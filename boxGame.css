@@ -1,0 +1,60 @@
+
+.container{
+	margin: 0 auto;
+	position: relative;
+	
+}
+.back{
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
+ 
+  background-color: orange;
+}
+.map1{
+	position: relative;
+	float: left;
+	background-color: #666666;/* 灰色*/
+	width: 50px;
+	height: 50px;
+	padding: 0;
+	margin: 0;
+}
+.map2{
+    float: left;
+	background-color: #FF0000 ;/* 红色*/
+	width: 50px;
+	height: 50px;
+	position: relative;
+	
+}
+.map3{
+	float: left;
+	background-color: #0000FF ;/* 蓝色*/
+	width: 50px;
+	height: 50px;
+	position: relative;
+
+}
+.map4{
+	float: left;
+	background-image: url("./imgs/wall.png");/*樯*/
+	width: 50px;
+	height: 50px;
+	position: relative;
+}
+.man{
+	position: absolute;
+	background-image: url("./imgs/man.png");/*人*/
+	width: 50px;
+	height: 50px;
+	z-index: 20;
+}
+.box{
+	position: absolute;
+	z-index: 20;
+	background-image: url("./imgs/box.png");/*盒子*/
+	width: 50px;
+	height: 50px;
+}
