@@ -62,8 +62,10 @@
                       	  this.createMap(this.iNow);
                       },
                       createMap:function(iNum){
+
                       	  $("body").empty();//!!!先清除事件！！！！
                           
+
                       	  this.oParent=$("<div class=container></div>").appendTo("body");//container是创建的
                       	  $("<button class=back>返回</button>").appendTo(this.oParent);
                           $("<button class=lastgk>上一关</button>").appendTo(this.oParent);
@@ -79,13 +81,14 @@
                       	 this.createBox(gk);
                       	 this.createMan(gk);
                       	 var This=this
-                         
+           
                       	$.proxy($(".back").click(function(){
                               if(gk.lastPosition.times!=0){
                                  gk.lastPosition.times-=1;
                                  This.back(gk.lastPosition.manLast[gk.lastPosition.times][0],gk.lastPosition.manLast[gk.lastPosition.times][1],
                                            gk.lastPosition.boxLast[gk.lastPosition.times][0],gk.lastPosition.boxLast[gk.lastPosition.times][1],
                                            gk.lastPosition.box[gk.lastPosition.times]);
+
                                 }
                              
 		                      	 	/*if(gk.lastPosition.btn){
@@ -161,7 +164,7 @@
                                    	$(".man").data("manPositionX",manX);
                                    	$(".man").data("manPositionY",manY);
                                    	obj.lastPosition.manLast.push([nowManX,nowManY]);
-                                    
+
                                     var btn=false;
                                    	//如果与某个箱子碰撞，则箱子移动一格  
                                    	$.each($(".box"),$.proxy(function(i,elem){
@@ -171,12 +174,14 @@
                                                  			if(obj.eMap[(manY-y)*obj.colNum+manX-x]==4||this.collisionBox(elem)){
                                                                      this.back(nowManX,nowManY,manX,manY,elem);
                                                                       obj.lastPosition.manLast.pop();
+
                                                  			}else{//保存上一次的位置，以及移动的箱子，可以后退。
                                                         obj.lastPosition.boxLast.push([manX,manY]);
                                                         obj.lastPosition.box.push(elem);
                                                  			}
                                                       btn=false;
                                                       return false;//结束循环
+
                                          		}else{//没碰撞，箱子推入0
                                                    btn=true;
                                             }
@@ -186,10 +191,12 @@
                                           obj.lastPosition.boxLast.push([]);
                                           obj.lastPosition.box.push(null);
                                     }   
+
                                      obj.lastPosition.times=obj.lastPosition.box.length;
                              }
                              //检测是否成功
                              this.victoryTest(obj);
+
                       },
                       victoryTest:function(gk){//胜利检测
                       	      var iNum=0;
@@ -207,10 +214,12 @@
                       	      if (iNum==gk.boxNum) {
                                   this.iNow++;
                       	      	  document.title="推箱子第"+this.iNow+"关";
+
                       	      	  this.createMap(this.iNow);
                       	      }
 
                       },
+
                       back:function(nowX,nowY,x,y,elem){//人物、箱子返回原坐标
                         if(elem){
                            $(elem).css("left",x*50+"px").css("top",y*50+"px");
@@ -218,6 +227,7 @@
                         $(".man").css("left", nowX*50+"px").css("top",nowY*50+"px");
                         $(".man").data("manPositionX",nowX);
                         $(".man").data("manPositionY",nowY);
+
                       },
                       collisionBox:function(elem){//是否与其他箱子碰撞
                       	    var bBtn=false;
