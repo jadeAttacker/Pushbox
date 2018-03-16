@@ -13,47 +13,46 @@
            	})
            	var  boxGame={
            		      iNow:0,
-                      gk:[ {  eMap:[  1,1,4,4,1,1,//第一关，1灰色2红色3蓝色4墙
-	                           	      1,4,2,2,4,1,
-	                           	      4,3,3,3,3,4,
-	                           	      4,2,3,3,3,4,
-	                           	      4,3,2,3,3,4,
-	                           	      4,4,4,4,4,4,
-	                           	],
-	                            boxNum:4,
-	                            boxPosition:[[2,3],[3,4],[2,2],[3,2],],
-	                            manPosition:[3,3],
-	                           	colNum:6,
-	                           	lastPosition:{//后退一步，
-	                           		btn:false,
-	                           		box:null,
-	                           		manLast:[],
-	                           		boxLast:[],
-	                           	}
+                    gk:[ {eMap:[  1,1,4,4,1,1,//第一关，1灰色2红色3蓝色4墙
+                           	      1,4,2,2,4,1,
+                           	      4,3,3,3,3,4,
+                           	      4,2,3,3,3,4,
+                           	      4,3,2,3,3,4,
+                           	      4,4,4,4,4,4,
+                           	],
+                            boxNum:4,
+                            boxPosition:[[2,3],[3,4],[2,2],[3,2],],
+                            manPosition:[3,3],
+                           	colNum:6,
+                           	lastPosition:{//后退一步，
+                           		times:0,
+                              box:[],
+                           		manLast:[],
+                           		boxLast:[]
+                           	}
+                         },
 
-
-                           },
-                           {  eMap:  [1,1,4,4,4,4,1,1,//第二关
-	                           	      1,1,4,2,2,4,1,1,
-	                           	      1,4,4,3,2,4,4,1,
-	                           	      1,4,3,3,3,2,4,1,
-	                           	      4,4,3,3,3,3,4,4,
-	                           	      4,3,3,4,3,3,3,4,
-	                           	      4,3,3,3,3,3,3,4,
-	                           	      4,4,4,4,4,4,4,4
-	                           	],
-	                           //	iNum:0,
-	                            boxNum:4,
-	                            boxPosition:[[4,3],[3,4],[4,5],[5,5],],
-	                            manPosition:[3,6],
-	                           	colNum:8,
-	                           	lastPosition:{
-	                           		btn:false,
-	                           		box:null,
-	                           		manLast:{x:null,y:null},
-	                           		boxLast:{x:null,y:null},
-	                           	}
-                           },
+                         {eMap: [ 1,1,4,4,4,4,1,1,//第二关，方形
+                           	      1,1,4,2,2,4,1,1,
+                           	      1,4,4,3,2,4,4,1,
+                           	      1,4,3,3,3,2,4,1,
+                           	      4,4,3,3,3,3,4,4,
+                           	      4,3,3,4,3,3,3,4,
+                           	      4,3,3,3,3,3,3,4,
+                           	      4,4,4,4,4,4,4,4
+                           	],
+                           //	iNum:0,
+                            boxNum:4,
+                            boxPosition:[[4,3],[3,4],[4,5],[5,5],],
+                            manPosition:[3,6],
+                           	colNum:8,
+                            lastPosition:{//后退一步，
+                              times:0,
+                              box:[],
+                              manLast:[],
+                              boxLast:[]
+                            }
+                         },
                           
                            {//第二关
 
@@ -66,9 +65,11 @@
                       	  $("body").empty();
                       	  this.oParent=$("<div class=container></div>").appendTo("body");//container是创建的
                       	  $("<button class=back>返回</button>").appendTo(this.oParent);
-                      	  var gk=this.gk[iNum];
+                          $("<button class=lastgk>上一关</button>").appendTo(this.oParent);
+                          $("<button class=nextgk>下一关</button>").appendTo(this.oParent);
+                      	  var gk=this.gk[iNum];//第一关的数据
                       	  this.oParent.css("width",gk.colNum*50+"px")
-                      	  $.each(gk.eMap,$.proxy(
+                      	  $.each(gk.eMap,$.proxy(//循环数组，第一层的红蓝墙灰
 	                      	    function(i,n){//n是数组每一项的值
 	                      	 	              //console.log("this is"+this);
 	                      	 	   $("<div class=map"+n+"></div>").appendTo(this.oParent)//这里的this指向n,用$.proxy换this。
@@ -78,17 +79,40 @@
                       	 this.createMan(gk);
                       	 var This=this
                       	$.proxy($(".back").click(function(){
-                      		        alert(this.attr("className"))
-		                      	 	if(gk.lastPosition.btn){
+                              console.log("返回")
+                              gk.lastPosition.times-=1;
+                              if( gk.lastPosition.times!=1){
+                               /* if(){//箱子没有动
+                                }else{//箱子动了
+                                }*/
+                                 This.back(gk.lastPosition.manLast[gk.lastPosition.times][0],gk.lastPosition.manLast[gk.lastPosition.times][1],
+                                           gk.lastPosition.boxLast[gk.lastPosition.times][0],gk.lastPosition.boxLast[gk.lastPosition.times][1],
+                                           gk.lastPosition.times);
+                                }
+                             
+		                      	 	/*if(gk.lastPosition.btn){
 		                      	 		This.back(gk.lastPosition.manLast.x,gk.lastPosition.manLast.y,gk.lastPosition.boxLast.x,gk.lastPosition.boxLast.y,gk.lastPosition.box);
 		                      	 		gk.lastPosition.btn=false;
-		                      	 	}
-                      	       })
-                      	,this) 
-
+		                      	 	}*/
+                      	       }),this) 
+                        $(".lastgk").click(function(){
+                          if(This.iNow>0){
+                              This.iNow--;
+                              document.title="推箱子第"+(This.iNow+1)+"关";
+                              This.createMap(This.iNow);
+                          }
+                        });
+                         $(".nextgk").click(function(){
+                          if(This.iNow<1){
+                              This.iNow++;
+                              document.title="推箱子第"+(This.iNow+1)+"关";
+                              This.createMap(This.iNow);
+                          }
+                        });
                       },
+
                       createBox:function(obj){
-	                      	$.each(obj.boxPosition,$.proxy(
+	                      	$.each(obj.boxPosition,$.proxy(//循环数组
 		                      	    function(i,n){//n是数组每一项的值
 		                      	 	   $("<div class=box></div>").appendTo(this.oParent)//这里的this指向n,用$.proxy换this。
 		                      	 	   .css("left",n[0]*50+"px").css("top",n[1]*50+"px")
@@ -96,9 +120,9 @@
 	                      		)
                       },
                       createMan:function(obj){
-                      		      $("<div class=man></div>").appendTo( this.oParent).css("left",obj.manPosition[0]*50+"px")
+                      		      $("<div class=man></div>").appendTo( this.oParent).css("left",obj.manPosition[0]*50+"px")//有单位
                       		      .css("top",obj.manPosition[1]*50+"px");
-                      		      $(".man").data("manPositionX",obj.manPosition[0]);
+                      		      $(".man").data("manPositionX",obj.manPosition[0]);//向元素附加数据，然后取回该数据
                       		      $(".man").data("manPositionY",obj.manPosition[1]);
                       		      var This=this;
                       		      $(document).unbind();//移除原事件
@@ -134,30 +158,48 @@
 
                              if(obj.eMap[(manY)*obj.colNum+manX]!=4){//不是墙的时候，进行移动。
                                 
-                             	//更新人物坐标。以及位置
-                             	$(".man").css("left", manX*50+"px").css("top",manY*50+"px");
-                             	$(".man").data("manPositionX",manX);
-                             	$(".man").data("manPositionY",manY);
-                             	
-                             	//如果与某个箱子碰撞，则箱子移动一格  
-                             	$.each($(".box"),$.proxy(function(i,elem){
-                             		if(this.collision($(".man"),$(elem))){//人物与某个箱子发生碰撞,箱子更新坐标
-                                        
-                             			$(elem).css("left",(manX-x)*50+"px").css("top",(manY-y)*50+"px");
-                             			//箱子移动后若撞墙(此时即人物前面是4），或者撞到另一个箱子，则返回原来位置，即：推不动。
-                             			if(obj.eMap[(manY-y)*obj.colNum+manX-x]==4||this.collisionBox(elem)){
-                                                 this.back(nowManX,nowManY,manX,manY,elem);
-                             			}else{
-                             				obj.lastPosition.manLast.x=nowManX;
-			                             	obj.lastPosition.manLast.y=nowManY;
-			                             	obj.lastPosition.boxLast.x=manX;
-			                             	obj.lastPosition.boxLast.y=manY;
-			                             	obj.lastPosition.box=elem;
-                                            obj.lastPosition.btn=true;
-                             			}
-                             		}
-                             	},this)
-                             	)                    	
+                                   	//更新人物坐标。以及位置
+                                   	$(".man").css("left", manX*50+"px").css("top",manY*50+"px");
+                                   	$(".man").data("manPositionX",manX);
+                                   	$(".man").data("manPositionY",manY);
+                                   	obj.lastPosition.manLast.push([nowManX,nowManY]);
+                                    obj.lastPosition.times+=1;
+                                    var btn=false;
+                                   	//如果与某个箱子碰撞，则箱子移动一格  
+                                   	$.each($(".box"),$.proxy(function(i,elem){
+                                         		if(this.collision($(".man"),$(elem))){//人物与某个箱子发生碰撞,箱子更新坐标
+                                                      $(elem).css("left",(manX-x)*50+"px").css("top",(manY-y)*50+"px");
+                                                 			//箱子移动后若撞墙(此时即人物前面是4），或者撞到另一个箱子，则返回原来位置，即：推不动。
+                                                 			if(obj.eMap[(manY-y)*obj.colNum+manX-x]==4||this.collisionBox(elem)){
+                                                                     this.back(nowManX,nowManY,manX,manY,elem);
+                                                                      obj.lastPosition.manLast.pop();
+                                                                      obj.lastPosition.times-=1;
+                                                                      btn=false;
+                                                 			}else{//保存上一次的位置，以及移动的箱子，可以后退。
+                                                        obj.lastPosition.boxLast.push([manX,manY]);
+                                                        obj.lastPosition.box.push(elem);
+
+                                                 			/*	obj.lastPosition.manLast.x=nowManX;
+                    			                             	obj.lastPosition.manLast.y=nowManY;
+                    			                             	obj.lastPosition.boxLast.x=manX;
+                    			                             	obj.lastPosition.boxLast.y=manY;
+                    			                             	obj.lastPosition.box=elem;
+                                                        obj.lastPosition.btn=true;*/
+                                                 			}
+                                         		}else{//没碰撞，箱子推入0
+                                                   btn=true;
+                                            }
+                                   	},this)
+                                   	)
+                                    if(btn){
+                                          obj.lastPosition.boxLast.push([]);
+                                          obj.lastPosition.box.push(null);
+                                    }   
+                                     console.log(obj.lastPosition.manLast)  
+                                     console.log(obj.lastPosition.boxLast)  
+                                     console.log(obj.lastPosition.times)  
+                                     console.log(obj.lastPosition.box)  
+
                              }
                              //检测是否成功
                              this.victoryTest(obj);
@@ -177,7 +219,8 @@
                       	      	   },this)
                       	      )
                       	      if (iNum==gk.boxNum) {
-                      	      	  document.title="推箱子第二关";
+                                  this.iNow++;
+                      	      	  document.title="推箱子第"+this.iNow+"关";
                       	      	  this.iNow++;
                       	      	  this.createMap(this.iNow);
                       	      }
@@ -203,7 +246,7 @@
                      		return bBtn;
                       },
 		              collision:function(obj1,obj2){//碰撞检测
-		                      var obj1Left=obj1.position().left;
+		                        var obj1Left=obj1.position().left;
 	                          var obj1Right=obj1.position().left+obj1.width();
 	                          var obj1Top=obj1.position().top;
 	                          var obj1Bottom=obj1.position().top+obj1.height();
