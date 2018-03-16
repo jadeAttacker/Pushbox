@@ -9,7 +9,20 @@
   right: 0;
   top: 0;
   z-index: 2;
- 
+  background-color: orange;
+}
+.lastgk {
+   position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  background-color: orange;
+}
+.nextgk {
+  position: absolute;
+  left: 0;
+  top: 30px;
+  z-index: 2;
   background-color: orange;
 }
 .map1{
